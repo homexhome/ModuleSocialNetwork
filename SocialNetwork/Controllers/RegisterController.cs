@@ -1,20 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SocialNetwork.Models.ViewModels.Account;
 
 namespace SocialNetwork.Web.Controllers
 {
-    public class RegisterController
+    public class RegisterController : Controller
     {
-        // TODO after adding views
-        //[Route("Register")]
-        //[HttpGet]
-        //public IActionResult Register() {
-        //    return View("Home/Register");
-        //}
+        [Route("Register")]
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View("Home/Register");
+        }
 
-        //[Route("RegisterPart2")]
-        //[HttpGet]
-        //public IActionResult RegisterPart2(RegisterViewModel model) {
-        //    return View("RegisterPart2", model);
-        //}
+        [Route("RegisterPart2")]
+        [HttpGet]
+        public IActionResult RegisterPart2(RegisterViewModel model)
+        {
+            return View("RegisterPart2", model);
+        }
     }
 }

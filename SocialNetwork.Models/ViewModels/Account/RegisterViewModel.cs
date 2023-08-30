@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SocialNetwork.Models.ViewModels
+namespace SocialNetwork.Models.ViewModels.Account
 {
     public class RegisterViewModel
     {
