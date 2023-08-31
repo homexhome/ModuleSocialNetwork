@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SocialNetwork.Data.Context;
 using SocialNetwork.Models.Db;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -22,6 +23,7 @@ builder.Services
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
