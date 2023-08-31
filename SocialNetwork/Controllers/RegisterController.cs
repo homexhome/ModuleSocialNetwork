@@ -19,7 +19,7 @@ namespace SocialNetwork.Web.Controllers
         }
 
         [Route("Register")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid) {

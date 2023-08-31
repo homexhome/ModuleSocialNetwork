@@ -21,6 +21,13 @@ namespace SocialNetwork.Web.Controllers
         }
 
         [Route("Login")]
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View("Home/Login");
+        }
+
+        [Route("Login")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model) {
