@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.Web", "SocialNetwork\SocialNetwork.Web.csproj", "{0B6467B7-A3A8-4215-899D-57C5D51245A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.Web", "SocialNetwork.Web\SocialNetwork.Web.csproj", "{0B6467B7-A3A8-4215-899D-57C5D51245A5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialNetwork.Models", "SocialNetwork.Models\SocialNetwork.Models.csproj", "{2C713993-21CB-448A-B079-3100C94B98EB}"
 EndProject
