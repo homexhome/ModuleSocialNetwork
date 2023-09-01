@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SocialNetwork.Models.Db
 {
@@ -18,7 +13,7 @@ namespace SocialNetwork.Models.Db
         //public string About { get; set; }
 
         //public string GetFullName() { return String.Join(' ', FirstName, LastName); }
-        
+
         //public User() {
         //    Image = "https://via.placeholder.com/500";
         //    Status = "OK";

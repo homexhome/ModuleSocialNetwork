@@ -20,8 +20,7 @@ namespace SocialNetwork.Web.Controllers
 
         [Route("Register")]
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
-        {
+        public async Task<IActionResult> Register(RegisterViewModel model) {
             if (ModelState.IsValid) {
                 var user = _mapper.Map<User>(model);
 
@@ -41,8 +40,7 @@ namespace SocialNetwork.Web.Controllers
 
         [Route("RegisterPart2")]
         [HttpGet]
-        public IActionResult RegisterPart2(RegisterViewModel model)
-        {
+        public IActionResult RegisterPart2(RegisterViewModel model) {
             return View("RegisterPart2", model);
         }
     }

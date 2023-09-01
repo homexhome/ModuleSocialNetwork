@@ -11,8 +11,7 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 
 builder.Services
     .AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString))
-    .AddIdentity<User, IdentityRole>(opts =>
-    {
+    .AddIdentity<User, IdentityRole>(opts => {
         opts.Password.RequiredLength = 5;
         opts.Password.RequireNonAlphanumeric = false;
         opts.Password.RequireDigit = false;
@@ -22,8 +21,7 @@ builder.Services
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Add AutoMapper
-var mapperConfig = new MapperConfiguration(mc =>
-{
+var mapperConfig = new MapperConfiguration(mc => {
     mc.AddProfile(new MappingProfile());
 });
 IMapper mapper = mapperConfig.CreateMapper();
@@ -36,8 +34,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
+if (!app.Environment.IsDevelopment()) {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }

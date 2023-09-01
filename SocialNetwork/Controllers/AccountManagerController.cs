@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Models.Db;
@@ -22,8 +21,7 @@ namespace SocialNetwork.Web.Controllers
 
         [Route("Login")]
         [HttpGet]
-        public IActionResult Login()
-        {
+        public IActionResult Login() {
             return View("Home/Login");
         }
 

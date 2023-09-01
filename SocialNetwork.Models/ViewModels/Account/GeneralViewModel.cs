@@ -7,8 +7,7 @@
         public LoginViewModel LoginView { get; set; }
 
 
-        public GeneralViewModel()
-        {
+        public GeneralViewModel() {
             RegisterView = new RegisterViewModel();
             LoginView = new LoginViewModel();
         }
