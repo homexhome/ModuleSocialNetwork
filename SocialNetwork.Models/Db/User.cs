@@ -19,5 +19,6 @@ namespace SocialNetwork.Models.Db
             Status = "OK";
             About = "About me";
         }
+
     }
 }

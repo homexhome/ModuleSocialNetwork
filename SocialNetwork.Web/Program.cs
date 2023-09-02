@@ -1,9 +1,10 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SocialNetwork.Data;
 using SocialNetwork.Data.Context;
 using SocialNetwork.Models.Db;
-
+using SocialNetwork.Web.Views.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 
 builder.Services
     .AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString))
+    .AddUnitOfWork()
+    .AddCustomRepository<Friend,FriendsRepository>()
     .AddIdentity<User, IdentityRole>(opts => {
         opts.Password.RequiredLength = 5;
         opts.Password.RequireNonAlphanumeric = false;

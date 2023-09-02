@@ -1,9 +1,12 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SocialNetwork.Data;
 using SocialNetwork.Models.Db;
 using SocialNetwork.Models.ViewModels.Account;
+using SocialNetwork.Models.ViewModels.Extensions;
+using SocialNetwork.Web.Views.AccountManager;
 
 namespace SocialNetwork.Web.Controllers
 {
@@ -13,11 +16,14 @@ namespace SocialNetwork.Web.Controllers
         private UserManager<User> _manager;
         private SignInManager<User> _signInManager;
 
-        public AccountManagerController(IMapper mapper, UserManager<User> manager, SignInManager<User> signInManager)
+        private IUnitOfWork _unitOfWork;
+
+        public AccountManagerController(IMapper mapper, UserManager<User> manager, SignInManager<User> signInManager, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _manager = manager;
             _signInManager = signInManager;
+            _unitOfWork = unitOfWork;
         }
 
         [Route("Login")]
@@ -49,11 +55,13 @@ namespace SocialNetwork.Web.Controllers
                 {
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                     {
-                        return Redirect(model.ReturnUrl);
+                        //return Redirect(model.ReturnUrl);
+                        return RedirectToAction("Index", "Home");
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("MyPage", "AccountManager");
+                        //return RedirectToAction("Index", "Home");
                     }
                 }
                 else
@@ -84,6 +92,8 @@ namespace SocialNetwork.Web.Controllers
 
             var model = new UserViewModel(result);
 
+            model.Friends = await GetAllFriend(model.User);
+
             return View("User", model);
         }
 
@@ -98,6 +108,109 @@ namespace SocialNetwork.Web.Controllers
             var editmodel = _mapper.Map<UserEditViewModel>(result);
 
             return View("Edit", editmodel);
+        }
+
+        [Authorize]
+        [Route("Update")]
+        [HttpPost]
+        public async Task<IActionResult> Update(UserEditViewModel model) {
+            if (ModelState.IsValid) {
+                var user = await _manager.FindByIdAsync(model.UserId);
+
+                user.Convert(model);
+
+                var result = await _manager.UpdateAsync(user);
+                if (result.Succeeded) {
+                    return RedirectToAction("MyPage", "AccountManager");
+                }
+                else {
+                    return RedirectToAction("Edit", "AccountManager");
+                }
+            }
+            else {
+                ModelState.AddModelError("", "Некорректные данные");
+                return View("Edit", model);
+            }
+        }
+
+        [Route("UserList")]
+        [HttpPost]
+        public async Task<IActionResult> UserList(string search) {
+            var model = await CreateSearch(search);
+            return View("UserList", model);
+        }
+
+        private async Task<SearchViewModel> CreateSearch(string search) {
+            var currentuser = User;
+
+            var result = await _manager.GetUserAsync(currentuser);
+
+            var list = _manager.Users.AsEnumerable().Where(x => x.GetFullName().ToLower().Contains(search.ToLower())).ToList();
+            var withfriend = await GetAllFriend();
+
+            var data = new List<UserWithFriendExt>();
+            list.ForEach(x =>
+            {
+                var t = _mapper.Map<UserWithFriendExt>(x);
+                t.IsFriendWithCurrent = withfriend.Where(y => y.Id == x.Id || x.Id == result.Id).Count() != 0;
+                data.Add(t);
+            });
+
+            var model = new SearchViewModel() {
+                UserList = data
+            };
+
+            return model;
+        }
+
+        private async Task<List<User>> GetAllFriend(User user) {
+            var repository = _unitOfWork.GetRepository<Friend>() as FriendsRepository;
+
+            return repository.GetFriendsByUser(user);
+        }
+
+        private async Task<List<User>> GetAllFriend() {
+            var user = User;
+
+            var result = await _manager.GetUserAsync(user);
+
+            var repository = _unitOfWork.GetRepository<Friend>() as FriendsRepository;
+
+            return repository.GetFriendsByUser(result);
+        }
+
+        [Route("AddFriend")]
+        [HttpPost]
+        public async Task<IActionResult> AddFriend(string id) {
+            var currentuser = User;
+
+            var result = await _manager.GetUserAsync(currentuser);
+
+            var friend = await _manager.FindByIdAsync(id);
+
+            var repository = _unitOfWork.GetRepository<Friend>() as FriendsRepository;
+
+            repository.AddFriend(result, friend);
+
+            return RedirectToAction("MyPage", "AccountManager");
+
+        }
+
+        [Route("DeleteFriend")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteFriend(string id) {
+            var currentuser = User;
+
+            var result = await _manager.GetUserAsync(currentuser);
+
+            var friend = await _manager.FindByIdAsync(id);
+
+            var repository = _unitOfWork.GetRepository<Friend>() as FriendsRepository;
+
+            repository.DeleteFriend(result, friend);
+
+            return RedirectToAction("MyPage", "AccountManager");
+
         }
     }
 }

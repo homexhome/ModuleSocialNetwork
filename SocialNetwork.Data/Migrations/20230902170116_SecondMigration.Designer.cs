@@ -12,8 +12,8 @@ using SocialNetwork.Data.Context;
 namespace SocialNetwork.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230901123512_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230902170116_SecondMigration")]
+    partial class SecondMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
