@@ -86,5 +86,18 @@ namespace SocialNetwork.Web.Controllers
 
             return View("User", model);
         }
+
+        [Route("Edit")]
+        [HttpGet]
+        public async Task<IActionResult> Edit()
+        {
+            var user = User;
+
+            var result = await _manager.GetUserAsync(user);
+
+            var editmodel = _mapper.Map<UserEditViewModel>(result);
+
+            return View("Edit", editmodel);
+        }
     }
 }
