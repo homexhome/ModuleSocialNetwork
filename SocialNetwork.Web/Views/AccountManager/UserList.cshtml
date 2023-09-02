@@ -1,4 +1,4 @@
-﻿@model SocialNetwork.Web.Views.AccountManager.UserListModel;
+﻿@model SocialNetwork.Models.ViewModels.Account.SearchViewModel;
 
 <div class="block-reg background-white">
 
@@ -7,7 +7,7 @@
         @foreach (var user in @Model.UserList) {
             <div>
                 <label>@user.GetFullName()</label>
-                @if (@* !@user.IsFriendWithCurrent *@ true) {
+                @if (!user.IsFriendWithCurrent) {
                     <div>
                         <img src="@user.Image" class="ava" />
                         <div>@user.Status</div>
