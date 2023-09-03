@@ -15,7 +15,7 @@ namespace SocialNetwork.Models.Db
         public string GetFullName() { return String.Join(' ', FirstName, LastName); }
 
         public User() {
-            Image = "https://via.placeholder.com/500";
+            Image = "https://thispersondoesnotexist.com";
             Status = "OK";
             About = "About me";
         }
