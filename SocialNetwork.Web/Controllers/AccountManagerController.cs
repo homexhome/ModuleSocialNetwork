@@ -6,7 +6,6 @@ using SocialNetwork.Data;
 using SocialNetwork.Models.Db;
 using SocialNetwork.Models.ViewModels.Account;
 using SocialNetwork.Models.ViewModels.Extensions;
-using SocialNetwork.Web.Views.AccountManager;
 
 namespace SocialNetwork.Web.Controllers
 {
@@ -112,21 +111,26 @@ namespace SocialNetwork.Web.Controllers
         [Authorize]
         [Route("Update")]
         [HttpPost]
-        public async Task<IActionResult> Update(UserEditViewModel model) {
-            if (ModelState.IsValid) {
+        public async Task<IActionResult> Update(UserEditViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
                 var user = await _manager.FindByIdAsync(model.UserId);
 
                 user.Convert(model);
 
                 var result = await _manager.UpdateAsync(user);
-                if (result.Succeeded) {
+                if (result.Succeeded)
+                {
                     return RedirectToAction("MyPage", "AccountManager");
                 }
-                else {
+                else
+                {
                     return RedirectToAction("Edit", "AccountManager");
                 }
             }
-            else {
+            else
+            {
                 ModelState.AddModelError("", "Некорректные данные");
                 return View("Edit", model);
             }
@@ -134,12 +138,14 @@ namespace SocialNetwork.Web.Controllers
 
         [Route("UserList")]
         [HttpPost]
-        public async Task<IActionResult> UserList(string search) {
+        public async Task<IActionResult> UserList(string search)
+        {
             var model = await CreateSearch(search);
             return View("UserList", model);
         }
 
-        private async Task<SearchViewModel> CreateSearch(string search) {
+        private async Task<SearchViewModel> CreateSearch(string search)
+        {
             var currentuser = User;
 
             var result = await _manager.GetUserAsync(currentuser);
@@ -155,20 +161,23 @@ namespace SocialNetwork.Web.Controllers
                 data.Add(t);
             });
 
-            var model = new SearchViewModel() {
+            var model = new SearchViewModel()
+            {
                 UserList = data
             };
 
             return model;
         }
 
-        private async Task<List<User>> GetAllFriend(User user) {
+        private async Task<List<User>> GetAllFriend(User user)
+        {
             var repository = _unitOfWork.GetRepository<Friend>() as FriendsRepository;
 
             return repository.GetFriendsByUser(user);
         }
 
-        private async Task<List<User>> GetAllFriend() {
+        private async Task<List<User>> GetAllFriend()
+        {
             var user = User;
 
             var result = await _manager.GetUserAsync(user);
@@ -180,7 +189,8 @@ namespace SocialNetwork.Web.Controllers
 
         [Route("AddFriend")]
         [HttpPost]
-        public async Task<IActionResult> AddFriend(string id) {
+        public async Task<IActionResult> AddFriend(string id)
+        {
             var currentuser = User;
 
             var result = await _manager.GetUserAsync(currentuser);
@@ -197,7 +207,8 @@ namespace SocialNetwork.Web.Controllers
 
         [Route("DeleteFriend")]
         [HttpPost]
-        public async Task<IActionResult> DeleteFriend(string id) {
+        public async Task<IActionResult> DeleteFriend(string id)
+        {
             var currentuser = User;
 
             var result = await _manager.GetUserAsync(currentuser);
