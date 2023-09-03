@@ -9,9 +9,9 @@ namespace SocialNetwork.Data.Context
     public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
             //Database.EnsureDeleted();
-            //Database.Migrate();
+            Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder builder) {

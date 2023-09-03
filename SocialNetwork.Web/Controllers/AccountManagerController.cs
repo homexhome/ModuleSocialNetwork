@@ -61,7 +61,6 @@ namespace SocialNetwork.Web.Controllers
                     else
                     {
                         return RedirectToAction("MyPage", "AccountManager");
-                        //return RedirectToAction("Index", "Home");
                     }
                 }
                 else

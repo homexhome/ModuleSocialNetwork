@@ -27,7 +27,7 @@ namespace SocialNetwork.Web.Controllers
                 var result = await _userManager.CreateAsync(user, model.PasswordReg);
                 if (result.Succeeded) {
                     await _signInManager.SignInAsync(user, false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("MyPage", "AccountManager");
                 }
                 else {
                     foreach (var error in result.Errors) {
