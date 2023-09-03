@@ -14,6 +14,7 @@ builder.Services
     .AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString))
     .AddUnitOfWork()
     .AddCustomRepository<Friend,FriendsRepository>()
+    .AddCustomRepository<Message, MessageRepository>()
     .AddIdentity<User, IdentityRole>(opts => {
         opts.Password.RequiredLength = 5;
         opts.Password.RequireNonAlphanumeric = false;
