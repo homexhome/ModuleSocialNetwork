@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using SocialNetwork.Data;
 using SocialNetwork.Models.Db;
 using SocialNetwork.Models.ViewModels.Account;
@@ -128,10 +129,15 @@ namespace SocialNetwork.Web.Controllers
 
         private async Task<SearchViewModel> CreateSearch(string search) {
             var currentuser = User;
+            string searchDelta = search;
 
             var result = await _manager.GetUserAsync(currentuser);
 
-            var list = _manager.Users.AsEnumerable().Where(x => x.GetFullName().ToLower().Contains(search.ToLower())).ToList();
+            if (search.IsNullOrEmpty()) {
+                searchDelta = "_";
+            }
+
+            var list = _manager.Users.AsEnumerable().Where(x => x.GetFullName().ToLower().Contains(searchDelta.ToLower())).ToList();
             var withfriend = await GetAllFriend();
 
             var data = new List<UserWithFriendExt>();
@@ -294,6 +300,23 @@ namespace SocialNetwork.Web.Controllers
             var messagesHtml = string.Join("<br>", messages.Select(message => $"{message.Sender.FirstName}: {message.Text}"));
 
             return Content(messagesHtml, "text/html");
+        }
+
+        [Route("Generate")]
+        [HttpGet]
+        public async Task<IActionResult> Generate() {
+
+            var usergen = new GenetateUsers();
+            var userlist = usergen.Populate(35);
+
+            foreach (var user in userlist) {
+                var result = await _manager.CreateAsync(user, "123456");
+
+                if (!result.Succeeded)
+                    continue;
+            }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
