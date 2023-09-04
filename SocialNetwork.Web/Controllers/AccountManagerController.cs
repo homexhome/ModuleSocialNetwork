@@ -151,7 +151,7 @@ namespace SocialNetwork.Web.Controllers
         private async Task<List<User>> GetAllFriend(User user) {
             var repository = _unitOfWork.GetRepository<Friend>() as FriendsRepository;
 
-            return repository.GetFriendsByUser(user);
+            return await repository.GetFriendsByUserAsync(user);
         }
 
         private async Task<List<User>> GetAllFriend() {
@@ -161,7 +161,7 @@ namespace SocialNetwork.Web.Controllers
 
             var repository = _unitOfWork.GetRepository<Friend>() as FriendsRepository;
 
-            return repository.GetFriendsByUser(result);
+            return await repository.GetFriendsByUserAsync(result);
         }
 
         [Route("AddFriend")]
@@ -175,7 +175,7 @@ namespace SocialNetwork.Web.Controllers
 
             var repository = _unitOfWork.GetRepository<Friend>() as FriendsRepository;
 
-            repository.AddFriend(result, friend);
+            await repository.AddFriendAsync(result, friend);
 
             return RedirectToAction("MyPage", "AccountManager");
 
@@ -192,7 +192,7 @@ namespace SocialNetwork.Web.Controllers
 
             var repository = _unitOfWork.GetRepository<Friend>() as FriendsRepository;
 
-            repository.DeleteFriend(result, friend);
+            await repository.DeleteFriendAsync(result, friend);
 
             return RedirectToAction("MyPage", "AccountManager");
 
@@ -275,6 +275,25 @@ namespace SocialNetwork.Web.Controllers
 
             var model = await GenerateChat(id);
             return View("Chat", model);
+        }
+
+        [Route("LoadMessages")]
+        [HttpGet]
+        public async Task<IActionResult> LoadMessages(string id) {
+            // Получите текущего пользователя
+            var currentUser = await _manager.GetUserAsync(User);
+
+            // Получите друга по его идентификатору (id)
+            var friend = await _manager.FindByIdAsync(id);
+
+            // Получите сообщения между текущим пользователем и другом
+            var repository = _unitOfWork.GetRepository<Message>() as MessageRepository;
+            var messages = await repository.GetMessages(currentUser, friend);
+
+            // Генерируйте HTML-код для сообщений, который будет возвращен на клиентскую сторону
+            var messagesHtml = string.Join("<br>", messages.Select(message => $"{message.Sender.FirstName}: {message.Text}"));
+
+            return Content(messagesHtml, "text/html");
         }
     }
 }

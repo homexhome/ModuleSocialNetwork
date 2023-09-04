@@ -1,6 +1,5 @@
 ﻿@model SocialNetwork.Models.ViewModels.Account.ChatViewModel
 
-<meta http-equiv="refresh" content="5">
 
 <div class="block-reg background-white">
     <div>
@@ -12,21 +11,23 @@
     <h4 class="center">Чат @Model.You.FirstName и  @Model.ToWhom.FirstName</h4>
 
     <div class="lined-block">
-        <label class="gray-text">Сообщения</label>
+        <div id="messageBlock" class="lined-block">
+            <label class="gray-text">Сообщения</label>
 
-        @if (Model.History.Count != 0) {
-            @foreach (var message in Model.History) {
+            @if (Model.History.Count != 0) {
+                @foreach (var message in Model.History) {
+                    <div>
+                        <label>@message.Sender.FirstName:</label>
+                        @message.Text
+                    </div>
+                }
+            }
+            else {
                 <div>
-                    <label>@message.Sender.FirstName:</label>
-                    @message.Text
+                    <label>У вас пока нет сообщений с @Model.ToWhom.GetFullName().</label>
                 </div>
             }
-        }
-        else {
-            <div>
-                <label>У вас пока нет сообщений с @Model.ToWhom.GetFullName().</label>
-            </div>
-        }
+        </div>
     </div>
 
     <div class="lined-block">
@@ -66,17 +67,40 @@
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
-                    return response.text(); 
+                    return response.text();
                 })
                 .then(data => {
                     // Handle the response data here
                     //console.log(data);
                     console.log("OK");
+                    location.reload();
                 })
                 .catch(error => {
                     // Handle errors here
                     console.error('There was a problem with the fetch operation:', error);
                 });
         });
+
+        function refreshMessages() {
+            // Отправьте запрос на сервер для загрузки новых сообщений
+            fetch('/LoadMessages?id=@Model.ToWhom.Id')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    // Обновите содержимое блока сообщений
+                    document.getElementById('messageBlock').innerHTML = data;
+                })
+                .catch(error => {
+                    // Обработка ошибок
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        }
+
+
+        setInterval(refreshMessages, 5000)
     </script>
 }

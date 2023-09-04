@@ -15,7 +15,7 @@ namespace SocialNetwork.Data
 
         }
 
-        public void AddFriend(User target, User Friend) {
+        public async Task AddFriendAsync(User target, User Friend) {
             var friends = Set.AsEnumerable().FirstOrDefault(x => x.UserId == target.Id && x.CurrentFriendId == Friend.Id);
 
             if (friends == null) {
@@ -26,21 +26,23 @@ namespace SocialNetwork.Data
                     CurrentFriendId = Friend.Id,
                 };
 
-                Create(item);
+                await Create(item);
             }
         }
 
-        public List<User> GetFriendsByUser(User target) {
-            var friends = Set.Include(x => x.CurrentFriend).AsEnumerable().Where(x => x.UserId == target.Id).Select(x => x.CurrentFriend);
+        public async Task<List<User>> GetFriendsByUserAsync(User target) {
+            var friends = Set.Include(x => x.CurrentFriend)
+                .Where(x => x.UserId == target.Id)
+                .Select(x => x.CurrentFriend);
 
-            return friends.ToList();
+            return await friends.ToListAsync();
         }
 
-        public void DeleteFriend(User target, User Friend) {
+        public async Task DeleteFriendAsync(User target, User Friend) {
             var friends = Set.AsEnumerable().FirstOrDefault(x => x.UserId == target.Id && x.CurrentFriendId == Friend.Id);
 
             if (friends != null) {
-                Delete(friends);
+                await Delete(friends);
             }
         }
 
