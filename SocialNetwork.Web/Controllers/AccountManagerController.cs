@@ -42,6 +42,11 @@ namespace SocialNetwork.Web.Controllers
         public async Task<IActionResult> Login(LoginViewModel model) {
             if (ModelState.IsValid) {
                 var user = _manager.FindByEmailAsync(model.Email).Result;
+
+                if (user == null) {
+                    return RedirectToAction("Index", "Home");
+                }
+
                 var result = await _signInManager.PasswordSignInAsync(userName: user.UserName,
                                                                       password: model.Password,
                                                                       isPersistent: model.RememberMe,
@@ -77,6 +82,11 @@ namespace SocialNetwork.Web.Controllers
             var user = User;
 
             var result = await _manager.GetUserAsync(user);
+
+            if (result == null) {
+                await _signInManager.SignOutAsync();
+                return RedirectToAction("Index", "Home");
+            }
 
             var model = new UserViewModel(result);
 
