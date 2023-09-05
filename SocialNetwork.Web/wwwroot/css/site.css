@@ -5,6 +5,10 @@ a {
     color: #0366d6;
 }
 
+header{
+    display:inline-block;
+    width:100%;
+}
 .btn-primary {
     color: #fff;
     background-color: #1b6ec2;

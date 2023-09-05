@@ -4,6 +4,9 @@
     padding: 10px;
 }
 
+header{
+   display:inline-block;
+}
 
 .side {
     -ms-flex: 60%; /* IE10 */
