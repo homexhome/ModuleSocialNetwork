@@ -23,7 +23,7 @@ namespace SocialNetwork.Models.ViewModels.Account
 
         [Required]
         [Display(Name = "День", Prompt = "День")]
-        public int? Date { get; set; } = 1;
+        public int? Date { get; set; }
 
         [Required]
         [Display(Name = "Месяц", Prompt = "Месяц")]
