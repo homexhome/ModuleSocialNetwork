@@ -19,15 +19,15 @@ namespace SocialNetwork.Models.ViewModels.Account
 
         [Required]
         [Display(Name = "Год", Prompt = "Год")]
-        public int? Year { get; set; }
+        public int? Year { get; set; } = 2008;
 
         [Required]
         [Display(Name = "День", Prompt = "День")]
-        public int? Date { get; set; }
+        public int? Date { get; set; } = 1;
 
         [Required]
         [Display(Name = "Месяц", Prompt = "Месяц")]
-        public int? Month { get; set; }
+        public int? Month { get; set; } = 1;
 
         [Required]
         [DataType(DataType.Password)]
